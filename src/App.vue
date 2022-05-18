@@ -1,23 +1,44 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { ref } from "vue-demi";
+const drawer = ref(true);
+const group = ref(null);
 </script>
-<template>
-  <div id="app">
-    <nav>
-      <router-link to="/">Dashboard</router-link> |
-      <router-link to="/about">Sensors</router-link>
-    </nav>
-    <router-view />
-  </div>
-</template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<template>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item>
+            <v-btn to="/" plain>
+              <v-icon>mdi-view-dashboard</v-icon>
+              <span class="pa-3">Dashboard</span>
+            </v-btn>
+          </v-list-item>
+
+          <v-list-item>
+            <v-btn to="/sensors" plain>
+              <v-icon>mdi-view-dashboard</v-icon>
+              <span class="pa-3">Sensors</span>
+            </v-btn>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar color="deep-purple" dark>
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+
+      <v-toolbar-title>Sensors monitor (demo app)</v-toolbar-title>
+    </v-app-bar>
+
+    <v-main>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+  </v-app>
+</template>

@@ -1,14 +1,14 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Dashboard from "../views/Dashboard.vue";
+import DashboardView from "../views/DashboardView.vue";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "home",
-    component: Dashboard,
+    name: "dashboard",
+    component: DashboardView,
   },
   {
     path: "/sensors",

@@ -16,7 +16,9 @@ module.exports = defineConfig({
       }),
     ],
   },
+
   parallel: false,
+
   chainWebpack(config) {
     // disable type check and let `vue-tsc` handles it
     config.plugins.delete("fork-ts-checker");
@@ -27,4 +29,6 @@ module.exports = defineConfig({
     config.module.rule("ts").uses.delete("cache-loader");
     config.module.rule("tsx").uses.delete("cache-loader");
   },
+
+  transpileDependencies: ["vuetify"],
 });
