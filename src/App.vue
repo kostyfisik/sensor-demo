@@ -21,15 +21,15 @@ const group = ref(null);
 
           <v-list-item>
             <v-btn to="/sensors" plain>
-              <v-icon>mdi-view-dashboard</v-icon>
-              <span class="pa-3">Sensors</span>
+              <v-icon>mdi-cloud-download</v-icon>
+              <span class="pa-3">Get data</span>
             </v-btn>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="deep-purple" dark>
+    <v-app-bar color="deep-purple" dark app>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Sensors monitor (demo app)</v-toolbar-title>
