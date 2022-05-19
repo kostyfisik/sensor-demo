@@ -1,12 +1,14 @@
-import { shallowMount } from "@vue/test-utils";
-import HelloWorld from "@/components/HelloWorld.vue";
+import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
+const api = new ApiSensorLocalStorage();
 
-describe("HelloWorld.vue", () => {
-  it("renders props.msg when passed", () => {
-    const msg = "new message";
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg },
-    });
-    expect(wrapper.text()).toMatch(msg);
+describe("ApiSensor", () => {
+  it("set and get sensor count", async () => {
+    await api.setSensorCount(3);
+    let count = await api.getSensorCount();
+    expect(count).toBe(3);
+
+    await api.setSensorCount(55);
+    count = await api.getSensorCount();
+    expect(count).toBe(55);
   });
 });

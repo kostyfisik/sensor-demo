@@ -1,18 +1,28 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue-demi";
+import { ref, watch } from "vue-demi";
 import { formTitleColsMd, formInputColsMd } from "@/settings";
 
 const currentDate = new Date().toJSON().slice(0, 10);
 const dates = ref<string[]>([currentDate, currentDate]);
-const datesTo = ref(currentDate);
 const datesFrom = ref(currentDate);
+const datesTo = ref(currentDate);
 const menu1 = ref(false);
 const menu2 = ref(false);
-watch([datesFrom, datesTo], (dates) => {
-  if (dates[0] > dates[1])
-    [datesFrom.value, datesTo.value] = [dates[1], dates[0]];
+watch([datesFrom, datesTo], (newVal) => {
+  if (newVal[0] > newVal[1])
+    [datesFrom.value, datesTo.value] = [newVal[1], newVal[0]];
+  dates.value[0] = datesFrom.value;
+  dates.value[1] = datesTo.value;
+});
+
+watch(dates, () => {
+  if (dates.value.length === 2) {
+    datesFrom.value = dates.value[0];
+    datesTo.value = dates.value[1];
+  }
 });
 </script>
+
 <template>
   <v-container>
     <v-row align="baseline" justify="start" no-gutters>
@@ -26,7 +36,7 @@ watch([datesFrom, datesTo], (dates) => {
           <v-col cols="12" :sm="formTitleColsMd">
             <div class="text-center text-sm-right">from:</div>
           </v-col>
-          <v-col cols="12" :sm="formInputColsMd">
+          <v-col cols="12" :sm="formInputColsMd + 3">
             <v-menu
               v-model="menu1"
               :close-on-content-click="false"
@@ -61,7 +71,7 @@ watch([datesFrom, datesTo], (dates) => {
           <v-col cols="12" :sm="formTitleColsMd">
             <div class="text-center text-sm-right">to:</div>
           </v-col>
-          <v-col cols="12" :sm="formInputColsMd">
+          <v-col cols="12" :sm="formInputColsMd + 3">
             <v-menu
               v-model="menu2"
               :close-on-content-click="false"
