@@ -1,7 +1,20 @@
 <script setup lang="ts">
-import DateRangeInput from "../components/DateRangeInput.vue";
-import SensorCountInput from "../components/SensorCountInput.vue";
+import { ref, watch } from "vue-demi";
+import DateRangeInput from "@/components/DateRangeInput.vue";
+import SensorCountInput from "@/components/SensorCountInput.vue";
 import SensorTypeInput from "@/components/SensorTypeInput.vue";
+import SensorDataUpdate from "@/components/SensorDataUpdate.vue";
+import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
+
+const api = new ApiSensorLocalStorage();
+
+const currentDate = new Date().toJSON().slice(0, 10);
+const dateFrom = ref(currentDate);
+const dateTo = ref(currentDate);
+watch([dateFrom, dateTo], () => {
+  console.log(dateFrom.value, dateTo.value);
+  api.setSensorDates(dateFrom.value, dateTo.value);
+});
 </script>
 <template>
   <v-container fill-height>
@@ -12,8 +25,15 @@ import SensorTypeInput from "@/components/SensorTypeInput.vue";
         </div>
       </v-col>
     </v-row>
+    <SensorDataUpdate />
     <SensorTypeInput />
     <SensorCountInput />
-    <DateRangeInput />
+    <DateRangeInput
+      title="Request dates"
+      :dateFrom="dateFrom"
+      :dateTo="dateTo"
+      @update:date-from="dateFrom = $event"
+      @update:date-to="dateTo = $event"
+    />
   </v-container>
 </template>

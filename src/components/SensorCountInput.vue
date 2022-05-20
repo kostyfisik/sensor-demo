@@ -8,8 +8,11 @@ import {
 } from "@/settings";
 import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
 const api = new ApiSensorLocalStorage();
-const sensorsCount = ref(2);
-api.setSensorCount(sensorsCount.value);
+const sensorsCount = ref(3);
+(async () => {
+  let count = await api.readSensorCount();
+  if (count !== 0) sensorsCount.value = count;
+})();
 watch(sensorsCount, () => {
   api.setSensorCount(sensorsCount.value);
 });

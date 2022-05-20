@@ -3,7 +3,6 @@ import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 </script>
 <template>
   <v-container>
-    test
-    <HelloWorld />
+    <HelloWorld msg="Welcome to Your Vue.js App" />
   </v-container>
 </template>

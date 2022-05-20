@@ -1,34 +1,73 @@
-<script setup lang="ts">
-import { ref, watch } from "vue-demi";
+<script lang="ts">
+/* eslint-disable no-undef */
+import { ref, watch, defineComponent, toRef } from "vue-demi";
 import { formTitleColsMd, formInputColsMd } from "@/settings";
 
-const currentDate = new Date().toJSON().slice(0, 10);
-const dates = ref<string[]>([currentDate, currentDate]);
-const datesFrom = ref(currentDate);
-const datesTo = ref(currentDate);
-const menu1 = ref(false);
-const menu2 = ref(false);
-watch([datesFrom, datesTo], (newVal) => {
-  if (newVal[0] > newVal[1])
-    [datesFrom.value, datesTo.value] = [newVal[1], newVal[0]];
-  dates.value[0] = datesFrom.value;
-  dates.value[1] = datesTo.value;
-});
+export default defineComponent({
+  props: {
+    dateFrom: String,
+    dateTo: String,
+    title: String,
+  },
+  emits: ["update:date-from", "update:date-to"],
+  setup(props, { emit }) {
+    function updateValue(value: string[]) {
+      console.log("before emit", value[0], value[1]);
+      emit("update:date-from", value[0]);
+      emit("update:date-to", value[1]);
+    }
 
-watch(dates, () => {
-  if (dates.value.length === 2) {
-    datesFrom.value = dates.value[0];
-    datesTo.value = dates.value[1];
-  }
+    const datesFromProp = toRef(props, "dateFrom");
+    const datesToProp = toRef(props, "dateTo");
+    const titleProp = toRef(props, "title");
+    console.log(datesFromProp.value, datesToProp.value);
+
+    const currentDate = new Date().toJSON().slice(0, 10);
+    const dates = ref<string[]>([currentDate, currentDate]);
+    const datesFrom = ref(currentDate);
+    const datesTo = ref(currentDate);
+    // if (datesProp.value?.length === 2) {
+    //   datesFrom.value = datesProp.value[0] as string;
+    //   datesTo.value = datesProp.value[1] as string;
+    // }
+    const menu1 = ref(false);
+    const menu2 = ref(false);
+
+    watch([datesFrom, datesTo], (newVal) => {
+      if (newVal[0] > newVal[1])
+        [datesFrom.value, datesTo.value] = [newVal[1], newVal[0]];
+      dates.value[0] = datesFrom.value;
+      dates.value[1] = datesTo.value;
+      updateValue(dates.value);
+    });
+
+    watch(dates, () => {
+      if (dates.value.length === 2) {
+        datesFrom.value = dates.value[0];
+        datesTo.value = dates.value[1];
+      }
+    });
+    return {
+      menu1,
+      menu2,
+      formTitleColsMd,
+      formInputColsMd,
+      dates,
+      datesFrom,
+      datesTo,
+      titleProp,
+    };
+  },
 });
 </script>
 
 <template>
   <v-container>
-    <v-row align="baseline" justify="start" no-gutters>
+    <!-- input prop {{ datesProp[0] }} and {{ datesProp[1] }} -->
+    <v-row align="baseline" justify="start">
       <v-col cols="12" :sm="formTitleColsMd">
         <div class="text-center text-sm-right font-weight-bold">
-          Request date
+          {{ titleProp }}
         </div>
       </v-col>
       <v-col cols="12" :sm="formInputColsMd">

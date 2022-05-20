@@ -1,7 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue-demi";
+import { ref, watch } from "vue-demi";
 import { formTitleColsMd, formInputColsMd, sensorTypes } from "@/settings";
+import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
+const api = new ApiSensorLocalStorage();
+
 const sensorsSelected = ref<string[]>([...sensorTypes]);
+(async () => {
+  let types = await api.readSensorTypes();
+  if (types.length !== 0) sensorsSelected.value = [...types];
+})();
+
+watch(sensorsSelected, () => {
+  api.setSensorTypes(sensorsSelected.value);
+});
 </script>
 <template>
   <v-container>
