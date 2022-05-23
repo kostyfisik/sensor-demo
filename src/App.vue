@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue-demi";
-const drawer = ref(true);
+const drawer = ref(false);
 const group = ref(null);
 </script>
 

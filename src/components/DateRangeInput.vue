@@ -12,15 +12,13 @@ export default defineComponent({
   emits: ["update:date-from", "update:date-to"],
   setup(props, { emit }) {
     function updateValue(value: string[]) {
-      console.log("before emit", value[0], value[1]);
       emit("update:date-from", value[0]);
       emit("update:date-to", value[1]);
     }
 
-    const datesFromProp = toRef(props, "dateFrom");
-    const datesToProp = toRef(props, "dateTo");
     const titleProp = toRef(props, "title");
-    console.log(datesFromProp.value, datesToProp.value);
+    const dateFromProp = toRef(props, "dateFrom");
+    const dateToProp = toRef(props, "dateTo");
 
     const currentDate = new Date().toJSON().slice(0, 10);
     const dates = ref<string[]>([currentDate, currentDate]);
@@ -47,6 +45,14 @@ export default defineComponent({
         datesTo.value = dates.value[1];
       }
     });
+
+    watch([dateFromProp, dateToProp], () => {
+      dates.value = [
+        dateFromProp.value || currentDate,
+        dateToProp.value || currentDate,
+      ];
+    });
+
     return {
       menu1,
       menu2,

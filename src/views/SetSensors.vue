@@ -7,12 +7,15 @@ import SensorDataUpdate from "@/components/SensorDataUpdate.vue";
 import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
 
 const api = new ApiSensorLocalStorage();
+const dateFrom = ref("");
+const dateTo = ref("");
+(async () => {
+  const dates = await api.readSensorDates();
+  dateFrom.value = dates[0];
+  dateTo.value = dates[1];
+})();
 
-const currentDate = new Date().toJSON().slice(0, 10);
-const dateFrom = ref(currentDate);
-const dateTo = ref(currentDate);
 watch([dateFrom, dateTo], () => {
-  console.log(dateFrom.value, dateTo.value);
   api.setSensorDates(dateFrom.value, dateTo.value);
 });
 </script>
