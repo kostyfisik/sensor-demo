@@ -15,8 +15,8 @@ const dateTo = ref("");
   dateTo.value = dates[1];
 })();
 
-watch([dateFrom, dateTo], () => {
-  api.setSensorDates(dateFrom.value, dateTo.value);
+watch([dateFrom, dateTo], (newVal, oldVal) => {
+  if (oldVal == ["", ""]) api.setSensorDates(dateFrom.value, dateTo.value);
 });
 </script>
 <template>

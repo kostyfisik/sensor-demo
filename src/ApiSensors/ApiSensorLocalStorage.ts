@@ -1,12 +1,19 @@
-import type { ApiSensorContract, DataRecord } from "./ApiSensorContract";
+import type {
+  ApiSensorContract,
+  DataRecord,
+  SensorRecord,
+} from "./ApiSensorContract";
 import { sensorsValueMin, sensorsValueMax, sensorTypes } from "@/settings";
 
 const prefix = "sensorsTest-";
 const sensorCountName = "sensorCount";
 const sensorTypesName = "sensorTypes";
 const sensorDatesName = "sensorDates";
-// const users = 'users'
+const sensorDataName = "sensorData";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function setData(path: string, data: any): Promise<void> {
+  window.localStorage.removeItem(prefix + sensorDataName);
   window.localStorage.setItem(prefix + path, JSON.stringify(data));
 }
 
@@ -48,6 +55,12 @@ export class ApiSensorLocalStorage implements ApiSensorContract {
 
   // data from sensors
   async readData(): Promise<DataRecord[]> {
+    const cachedData: DataRecord[] = JSON.parse(
+      window.localStorage.getItem(prefix + sensorDataName) || "[]"
+    );
+    if (cachedData.length !== 0) {
+      return cachedData;
+    }
     const sensorCount = await this.readSensorCount();
     const sensorDates = await this.readSensorDates();
     const sensorTypes = await this.readSensorTypes();
@@ -65,6 +78,22 @@ export class ApiSensorLocalStorage implements ApiSensorContract {
             sensorType: sensor,
           });
       }
+    }
+    setData(sensorDataName, data);
+    return data;
+  }
+
+  // data from sensors
+  async readActiveSensors(): Promise<SensorRecord[]> {
+    const sensorCount = await this.readSensorCount();
+    const sensorTypes = await this.readSensorTypes();
+    const data: SensorRecord[] = [];
+    for (const sensor of sensorTypes) {
+      for (const id of Array(sensorCount).keys())
+        data.push({
+          sensorId: id,
+          sensorType: sensor,
+        });
     }
     return data;
   }

@@ -4,14 +4,19 @@ import { formTitleColsMd, formInputColsMd, sensorTypes } from "@/settings";
 import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
 const api = new ApiSensorLocalStorage();
 
-const sensorsSelected = ref<string[]>([...sensorTypes]);
+const sensorsSelected = ref<string[]>();
+let initialState = true;
 (async () => {
   let types = await api.readSensorTypes();
   if (types.length !== 0) sensorsSelected.value = [...types];
 })();
 
 watch(sensorsSelected, () => {
-  api.setSensorTypes(sensorsSelected.value);
+  if (initialState) {
+    initialState = false;
+    return;
+  }
+  if (sensorsSelected.value) api.setSensorTypes(sensorsSelected.value);
 });
 </script>
 <template>

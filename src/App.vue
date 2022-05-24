@@ -6,7 +6,7 @@ const group = ref(null);
 
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" temporary app>
       <v-list nav dense>
         <v-list-item-group
           v-model="group"
@@ -37,7 +37,11 @@ const group = ref(null);
 
     <v-main>
       <v-container fluid>
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </v-container>
     </v-main>
   </v-app>

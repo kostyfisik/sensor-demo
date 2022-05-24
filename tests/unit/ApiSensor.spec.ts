@@ -51,5 +51,25 @@ describe("ApiSensor", () => {
     const valuesData = data.map((x) => x.recordValue).sort();
     expect(valuesData[0] >= sensorsValueMin).toBe(true);
     expect(valuesData[valuesData.length - 1] <= sensorsValueMax).toBe(true);
+
+    // subsequent calls to be return the same data
+    await api.setSensorDates(sensorDates[0], sensorDates[0]);
+    let oldData = JSON.stringify(await api.readData());
+    let newData = JSON.stringify(await api.readData());
+    expect(oldData == newData).toBe(true);
+    // if we change anything data should be randomly regenerated
+    oldData = JSON.stringify(await api.readData());
+    await api.setSensorCount(sensorCount);
+    newData = JSON.stringify(await api.readData());
+    expect(oldData != newData).toBe(true);
+  });
+
+  it("provides valid sensors", async () => {
+    await api.setSensorTypes(sensorTypes);
+    await api.setSensorCount(sensorCount);
+    const data = await api.readActiveSensors();
+
+    const totalRecords = sensorTypes.length * sensorCount;
+    expect(data.length).toBe(totalRecords);
   });
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue-demi";
+import { ref } from "vue-demi";
 import { formTitleColsMd, formInputColsMd } from "@/settings";
 import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
 const api = new ApiSensorLocalStorage();
@@ -14,7 +14,7 @@ async function countRecords() {
     }, downloadDelay);
 }
 setTimeout(() => {
-  // Let async opereations on mount to settle down before requesting data from api.
+  // Let async operations on mount to settle down before requesting data from api.
   countRecords();
 }, 100);
 </script>

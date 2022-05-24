@@ -1,5 +1,4 @@
 <script lang="ts">
-/* eslint-disable no-undef */
 import { ref, watch, defineComponent, toRef } from "vue-demi";
 import { formTitleColsMd, formInputColsMd } from "@/settings";
 

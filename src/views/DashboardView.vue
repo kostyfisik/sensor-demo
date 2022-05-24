@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 import { ref } from "vue-demi";
+// @ is an alias to /src
 import { formTitleColsMd, formInputColsMd } from "@/settings";
-import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
-const api = new ApiSensorLocalStorage();
-// const data = api.readData();
+import DashboardChart from "@/components/DashboardChart.vue";
 const plotsCount = ref(1);
-(async () => {
-  console.log(await api.readData());
-})();
 </script>
 <template>
   <v-container>
@@ -29,13 +24,8 @@ const plotsCount = ref(1);
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        v-for="plotVal in plotsCount"
-        v-bind:key="plotVal"
-        cols="12"
-        sm="6"
-      >
-        test {{ plotVal }}
+      <v-col v-for="plotVal in plotsCount" v-bind:key="plotVal" cols="12">
+        <DashboardChart />
       </v-col>
     </v-row>
 
