@@ -109,7 +109,7 @@ export default defineComponent({
       </v-col>
     </v-row>
 
-    <v-row align="end" justify="start" no-gutters>
+    <v-row align="start" justify="start" no-gutters>
       <v-col cols="12" :offset-sm="formTitleColsMd" :sm="formInputColsMd">
         <v-row justify="center" align="baseline">
           <v-col cols="12" :sm="formTitleColsMd" class="mb-0 pb-0">
@@ -145,7 +145,7 @@ export default defineComponent({
     <v-row align="end" justify="start" no-gutters>
       <v-col cols="12" :offset-sm="formTitleColsMd" :sm="formInputColsMd">
         <div class="text-center">
-          <v-date-picker v-model="dates" range></v-date-picker>
+          <v-date-picker v-model="dates" range elevation="15"></v-date-picker>
         </div>
       </v-col>
     </v-row>

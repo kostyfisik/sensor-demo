@@ -9,7 +9,6 @@ export default defineComponent({
     const chartTypeChoice = ref<string[]>(["line", "bar"]);
 
     watch(chartTypeSelected, () => {
-      console.log(chartTypeSelected.value);
       if (chartTypeSelected.value == "line")
         emit("update:chartType", "scatter");
       else emit("update:chartType", chartTypeSelected.value);

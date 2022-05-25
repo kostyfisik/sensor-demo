@@ -7,12 +7,18 @@ import ReactiveChart from "@/components/ReactiveChart.vue";
 import type { plotlyChart } from "./ReactiveChart.vue";
 import { Data, PlotType } from "plotly.js-dist-min";
 import { useElementSize } from "@vueuse/core";
+import DateRangeInput from "@/components/DateRangeInput.vue";
 import DashboardSensorInput from "./DashboardSensorInput.vue";
 import DashboardColorInput from "./DashboardColorInput.vue";
 import DashboardChartTypeInput from "./DashboardChartTypeInput.vue";
 
 const colorSelected = ref("default");
 const chartTypeSelected = ref("scatter");
+const isShowDateInput = ref(true);
+const currentDate = new Date().toJSON().slice(0, 10);
+
+const dateFrom = ref(currentDate);
+const dateTo = ref(currentDate);
 const api = new ApiSensorLocalStorage();
 const el = ref(null);
 const { width } = useElementSize(el);
@@ -21,6 +27,9 @@ const data = ref<DataRecord[]>([]);
 const dataFiltered = ref<DataRecord[]>([]);
 (async () => {
   data.value = await api.readData();
+  const dates = data.value.map((x) => x.recordDate).sort();
+  dateFrom.value = dates[0];
+  dateTo.value = dates[dates.length - 1];
 })();
 
 const chartLocal = reactive<plotlyChart>({
@@ -72,7 +81,15 @@ function filterData() {
         return true;
     return false;
   });
-  dataFiltered.value = sensorFiltered;
+  let dateFiltered = sensorFiltered.filter((x) => {
+    if (
+      !isShowDateInput.value ||
+      !(x.recordDate < dateFrom.value || x.recordDate > dateTo.value)
+    )
+      return true;
+    return false;
+  });
+  dataFiltered.value = dateFiltered;
 
   chartLocal.data = [];
   for (let sensor of sensorSelected.value) {
@@ -105,14 +122,19 @@ watch(width, () => {
   chartLocal.layout.width = width.value;
 });
 
-watch([sensorSelected, colorSelected, chartTypeSelected], () => {
-  // console.log([
-  //   sensorSelected.value,
-  //   colorSelected.value,
-  //   chartTypeSelected.value,
-  // ]);
-  filterData();
-});
+watch(
+  [
+    sensorSelected,
+    colorSelected,
+    chartTypeSelected,
+    isShowDateInput,
+    dateFrom,
+    dateTo,
+  ],
+  () => {
+    filterData();
+  }
+);
 </script>
 
 <template>
@@ -144,6 +166,29 @@ watch([sensorSelected, colorSelected, chartTypeSelected], () => {
       <v-col cols="12">
         <DashboardChartTypeInput
           @update:chartType="chartTypeSelected = $event"
+        />
+      </v-col>
+    </v-row>
+    <v-row align="baseline" justify="start">
+      <v-col cols="12" :sm="formTitleColsMd" class="my-0 py-0">
+        <div class="text-center text-sm-right font-weight-bold">
+          Filter by date
+        </div>
+      </v-col>
+      <v-col cols="12" :sm="formInputColsMd" class="my-0 py-0">
+        <div class="text-center">
+          <v-switch v-model="isShowDateInput"></v-switch>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" v-show="isShowDateInput">
+        <DateRangeInput
+          title="select dates"
+          :dateFrom="dateFrom"
+          :dateTo="dateTo"
+          @update:date-from="dateFrom = $event"
+          @update:date-to="dateTo = $event"
         />
       </v-col>
     </v-row>
