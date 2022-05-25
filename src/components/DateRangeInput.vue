@@ -77,10 +77,10 @@ export default defineComponent({
       </v-col>
       <v-col cols="12" :sm="formInputColsMd">
         <v-row justify="center" align="baseline">
-          <v-col cols="12" :sm="formTitleColsMd">
-            <div class="text-center text-sm-right">from:</div>
+          <v-col cols="12" :sm="formTitleColsMd" class="ma-0 pa-0">
+            <div class="text-center text-sm-right">from</div>
           </v-col>
-          <v-col cols="12" :sm="formInputColsMd + 3">
+          <v-col cols="12" :sm="formInputColsMd + 3" class="my-0 py-0">
             <v-menu
               v-model="menu1"
               :close-on-content-click="false"
@@ -112,10 +112,10 @@ export default defineComponent({
     <v-row align="end" justify="start" no-gutters>
       <v-col cols="12" :offset-sm="formTitleColsMd" :sm="formInputColsMd">
         <v-row justify="center" align="baseline">
-          <v-col cols="12" :sm="formTitleColsMd">
-            <div class="text-center text-sm-right">to:</div>
+          <v-col cols="12" :sm="formTitleColsMd" class="mb-0 pb-0">
+            <div class="text-center text-sm-right">to</div>
           </v-col>
-          <v-col cols="12" :sm="formInputColsMd + 3">
+          <v-col cols="12" :sm="formInputColsMd + 3" class="my-0 py-0">
             <v-menu
               v-model="menu2"
               :close-on-content-click="false"

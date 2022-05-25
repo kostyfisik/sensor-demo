@@ -22,12 +22,12 @@ watch(sensorsSelected, () => {
 <template>
   <v-container>
     <v-row align="center" justify="start">
-      <v-col cols="12" :sm="formTitleColsMd">
+      <v-col cols="12" :sm="formTitleColsMd" class="mb-0 pb-0">
         <div class="text-center text-sm-right font-weight-bold">
           Sensor types
         </div>
       </v-col>
-      <v-col cols="12" :sm="formInputColsMd">
+      <v-col cols="12" :sm="formInputColsMd" class="mt-0 pt-0">
         <div class="text-center">
           <v-select
             v-model="sensorsSelected"

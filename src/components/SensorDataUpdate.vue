@@ -26,13 +26,15 @@ setTimeout(() => {
           Available data
         </div>
       </v-col>
-      <v-col cols="12" :sm="formInputColsMd">
+      <v-col cols="12" :sm="formInputColsMd" class="my-0 py-0">
         <v-row class="text-center">
           <v-col v-if="dataRecords == 0"> Loading... </v-col>
           <v-col v-else> Downloaded {{ dataRecords }} data samples. </v-col>
         </v-row>
         <v-row class="text-center">
-          <v-col> <v-btn @click="countRecords">Update</v-btn></v-col>
+          <v-col class="mb-5 mt-0 pt-0">
+            <v-btn @click="countRecords">Update</v-btn></v-col
+          >
         </v-row>
       </v-col>
     </v-row>

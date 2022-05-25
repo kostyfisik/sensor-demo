@@ -24,7 +24,7 @@ watch(sensorsCount, async (newVal) => {
 <template>
   <v-container>
     <v-row align="center" justify="start">
-      <v-col cols="12" :sm="formTitleColsMd">
+      <v-col cols="12" :sm="formTitleColsMd" class="my-0 py-0">
         <div class="text-center text-sm-right font-weight-bold">
           Sensors count
         </div>
@@ -34,6 +34,7 @@ watch(sensorsCount, async (newVal) => {
           {{ sensorsCount }} of each type
           <v-slider
             v-model="sensorsCount"
+            dense
             :min="sensorsCountMin"
             :max="sensorsCountMax"
           />
