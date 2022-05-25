@@ -5,8 +5,14 @@ import { ApiSensorLocalStorage } from "@/ApiSensors/ApiSensorLocalStorage";
 import type { DataRecord, SensorRecord } from "@/ApiSensors/ApiSensorContract";
 import ReactiveChart from "@/components/ReactiveChart.vue";
 import type { plotlyChart } from "./ReactiveChart.vue";
-import DashboardSensorInput from "./DashboardSensorInput.vue";
+import { Data, PlotType } from "plotly.js-dist-min";
 import { useElementSize } from "@vueuse/core";
+import DashboardSensorInput from "./DashboardSensorInput.vue";
+import DashboardColorInput from "./DashboardColorInput.vue";
+import DashboardChartTypeInput from "./DashboardChartTypeInput.vue";
+
+const colorSelected = ref("default");
+const chartTypeSelected = ref("scatter");
 const api = new ApiSensorLocalStorage();
 const el = ref(null);
 const { width } = useElementSize(el);
@@ -80,21 +86,32 @@ function filterData() {
       //  + " 00:00:00"
     );
     let y = oneSensorData.map((y) => y.recordValue);
-    chartLocal.data.push({
+    const trace: Data = {
       x: x,
       y: y,
-      type: "scatter",
+      type: chartTypeSelected.value as PlotType,
       name:
         sensor.sensorType.toString() + " " + (sensor.sensorId + 1).toString(),
-    });
+    };
+    if (colorSelected.value != "default") {
+      trace["marker"] = { color: colorSelected.value };
+    }
+
+    chartLocal.data.push(trace);
   }
 }
-watch(sensorSelected, () => {
-  filterData();
-});
 
 watch(width, () => {
   chartLocal.layout.width = width.value;
+});
+
+watch([sensorSelected, colorSelected, chartTypeSelected], () => {
+  // console.log([
+  //   sensorSelected.value,
+  //   colorSelected.value,
+  //   chartTypeSelected.value,
+  // ]);
+  filterData();
 });
 </script>
 
@@ -120,6 +137,14 @@ watch(width, () => {
     <v-row>
       <v-col cols="12">
         <DashboardSensorInput @update:sensors="sensorSelectedString = $event" />
+      </v-col>
+      <v-col cols="12">
+        <DashboardColorInput @update:colors="colorSelected = $event" />
+      </v-col>
+      <v-col cols="12">
+        <DashboardChartTypeInput
+          @update:chartType="chartTypeSelected = $event"
+        />
       </v-col>
     </v-row>
   </v-container>
